@@ -1,5 +1,5 @@
 //Hooks
-import { useState } from "react"; 
+import { useState, useEffect } from "react"; 
 
 //Components
 import AddTask from "./components/addTask";
@@ -7,6 +7,20 @@ import Tasks from "./components/Tasks";
 
 export const App = () => {
     const [tasks, setTasks] = useState([]);
+
+    //Cuando se inicia el componente
+    useEffect(() => {
+        const tasksLocalStorage = localStorage.getItem('tasks');
+        const tasksLocalStorageArray = JSON.parse(tasksLocalStorage);
+        if(tasksLocalStorageArray.length > 0) {
+            setTasks(JSON.parse(tasksLocalStorage));
+        }
+    }, []);
+
+    //Cuando hay un cambio en las tareas
+    useEffect(() => {
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+    }, [tasks]);
 
     return(
         <div className="min-h-screen flex justify-center items-center bg-slate-500 p-6">
